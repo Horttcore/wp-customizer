@@ -14,19 +14,18 @@ A helper package for working with the WordPress Customizer
 use Horttcore\Customizer\Manager;
 
 (new Manager)
-    ->panel( $panelLabel )
-        ->section( $sectionLabel )
-            ->checkbox( $optionLabel, $optionName )
-            ->color( $optionLabel, $optionName )
-            ->file( $optionLabel, $optionName )
-            ->image( $optionLabel, $optionName )
-            ->page( $optionLabel, $optionName )
-            ->radio( $optionLabel, $optionName, ['option1' => 'Option 1', 'option2' => 'Option 2'] );
-            ->select( $optionLabel, $optionName, ['option1' => 'Option 1', 'option2' => 'Option 2'] );
-            ->text( $optionLabel, $optionName )
-            ->textarea( $optionLabel, $optionName )
-            ->url( $optionLabel, $optionName )
-    ->init(); // Required
+    ->panel( 'My Panel' )
+        ->section( 'My Section' )
+            ->checkbox( 'my-checkbox', 'Checkbox' )
+            ->color( 'my-color', 'Color' )
+            ->file( 'my-file', 'File' )
+            ->image( 'my-image', 'Image' )
+            ->page( 'my-page', 'Page' )
+            ->radio( 'my-radio', 'Radio', ['option1' => 'Option 1', 'option2' => 'Option 2'] );
+            ->select( 'my-select', 'Select', ['option1' => 'Option 1', 'option2' => 'Option 2'] );
+            ->text( 'my-text', 'Text' )
+            ->textarea( 'my-textarea', 'Textare' )
+            ->url( 'my-url', 'Url' )
 ```
 
 ## Changelog

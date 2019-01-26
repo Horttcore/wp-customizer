@@ -18,28 +18,44 @@ class Manager
 {
 
 
+    
+    /**
+     * Construct
+     *
+     * @param bool $autoInit
+     * @return Manager
+     **/
+    public function __construct(bool $autoInit = TRUE )
+    {
+        if ( !$autoInit )
+            return;
+
+        $this->register();
+    }
+
+
+    /**
+     * Current panel id
+     *
+     * @var string
+     */
+    protected $currentPanelId = '';
+
+
+    /**
+     * Current section id
+     *
+     * @var string
+     */
+    protected $currentSectionId = '';
+
+
     /**
      * Panels
      *
      * @var array
      */
     protected $panels = [];
-
-
-    /**
-     * Settings
-     *
-     * @var array
-     */
-    protected $sections = [];
-
-
-    /**
-     * Settings
-     *
-     * @var array
-     */
-    protected $settings = [];
 
 
     /**
@@ -92,9 +108,9 @@ class Manager
         $setting = array_filter( wp_parse_args( $setting, $settingDefaults ) );
         $control = array_filter( wp_parse_args( $control, $controlDefaults ) );
 
-        $this->settings[$this->getCurrentSectionId()][$identifier]['setting'] = $setting;
-        $this->settings[$this->getCurrentSectionId()][$identifier]['control'] = $control;
-        $this->settings[$this->getCurrentSectionId()][$identifier]['renderer'] = $renderer;
+        $this->panels[$this->getCurrentPanelId()]['sections'][$this->getCurrentSectionId()]['fields'][$identifier]['setting'] = $setting;
+        $this->panels[$this->getCurrentPanelId()]['sections'][$this->getCurrentSectionId()]['fields'][$identifier]['control'] = $control;
+        $this->panels[$this->getCurrentPanelId()]['sections'][$this->getCurrentSectionId()]['fields'][$identifier]['renderer'] = $renderer;
 
         return $this;
     }
@@ -138,8 +154,7 @@ class Manager
      **/
     public function getCurrentPanelId()
     {
-        end( $this->panels );
-        return key( $this->panels );
+        return $this->currentPanelId;
     }
 
 
@@ -150,8 +165,7 @@ class Manager
      **/
     public function getCurrentSectionId()
     {
-        end( $this->sections );
-        return key( $this->sections );
+        return $this->currentSectionId;
     }
 
 
@@ -191,7 +205,7 @@ class Manager
      * @param WP_Customizer $customizer Customizer instance
      * @return void
      */
-    public function init( WP_Customizer $customizer )
+    public function init( \WP_Customize_Manager $customizer )
     {
 
         foreach ( $this->panels as $panelId => $panel ) :
@@ -200,16 +214,16 @@ class Manager
 
             foreach ( $panel['sections'] as $sectionId => $section ) :
 
-                $customizer->add_section( $identifier, $section );
+                $customizer->add_section( $sectionId, $section );
 
-                 foreach ( $section['settings'] as $identifier => $config ) :
+                 foreach ( $section['fields'] as $field => $config ) :
 
-                    $customizer->add_setting( $identifier, $config['setting'] );
+                    $customizer->add_setting( $field, $config['setting'] );
 
                     if ( $config['renderer'] ) :
                         $customizer->add_control( new $config['renderer'](
                             $customizer,
-                            $identifier,
+                            $field,
                             $config['control']
                         ) );
                         continue;
@@ -233,7 +247,7 @@ class Manager
      */
     public function register()
     {
-        add_action( 'customize_register', [$this, 'register'] );
+        add_action( 'customize_register', [$this, 'init'] );
     }
 
 
@@ -261,14 +275,15 @@ class Manager
      * 
      * @return Manager
      **/
-    public function panel(string $label, $args)
+    public function panel(string $label, array $args = []): Manager
     {
         $identifier = sanitize_title( $label );
+        $this->currentPanelId = $identifier;
+
         $this->panels[$identifier]['title'] = $label;
         $this->panels[$identifier]['priority'] = 200;
         $this->panels[$identifier]['sections'] = [];
         $this->panels[$identifier] = array_merge($this->panels[$identifier], $args);
-
         return $this;
     }
 
@@ -302,7 +317,10 @@ class Manager
     public function section( string $label, $args = [] )
     {
         $identifier = sanitize_title( $label );
+        $this->currentSectionId = $identifier;
+
         $args['title'] = $label;
+        $args['panel'] = $this->getCurrentPanelId();
         $this->panels[$this->getCurrentPanelId()]['sections'][$identifier] = $args;
 
         return $this;
