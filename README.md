@@ -10,7 +10,9 @@ A helper package for working with the WordPress Customizer
 
 ### Basics
 
+#### Configuration
 ```php
+<?php
 use Horttcore\Customizer\Manager;
 
 (new Manager)
@@ -24,8 +26,14 @@ use Horttcore\Customizer\Manager;
             ->radio( 'my-radio', 'Radio', ['option1' => 'Option 1', 'option2' => 'Option 2'] );
             ->select( 'my-select', 'Select', ['option1' => 'Option 1', 'option2' => 'Option 2'] );
             ->text( 'my-text', 'Text' )
-            ->textarea( 'my-textarea', 'Textare' )
-            ->url( 'my-url', 'Url' )
+            ->textarea( 'my-textarea', 'Textarea' )
+            ->url( 'my-url', 'Url' );
+```
+
+#### Retrieving data
+```php
+<?php
+get_theme_mod('my-color)
 ```
 
 ## Changelog
