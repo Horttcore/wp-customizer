@@ -2,10 +2,6 @@
     "name": "horttcore/wp-customizer",
     "description": "A helper package for working with the WordPress Customizer",
     "license": "MIT",
-<<<<<<< HEAD
-    "version": "1",
-=======
->>>>>>> develop
     "authors": [
         {
             "name": "Ralf Hortt",
