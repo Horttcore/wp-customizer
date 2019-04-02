@@ -10,12 +10,11 @@ A helper package for working with the WordPress Customizer
 
 ### Basics
 
-#### Configuration
 ```php
 <?php
-use Horttcore\Customizer\Manager;
+use Horttcore\Customizer\Customize;
 
-(new Manager)
+(new Customize)
     ->panel( 'My Panel' )
         ->section( 'My Section' )
             ->checkbox( 'my-checkbox', 'Checkbox' )
@@ -30,7 +29,34 @@ use Horttcore\Customizer\Manager;
             ->url( 'my-url', 'Url' );
 ```
 
+### Advanced
+
+#### Save as option instead of theme_mod
+
+```php
+<?php
+use Horttcore\Customizer\Customize;
+
+(new Customize)
+    ->panel( 'My Panel' )
+        ->section( 'My Section' )
+            ->text( 'my-text', 'Text', ['type' => 'option'] )
+```
+
+#### Check for a capability
+
+```php
+<?php
+use Horttcore\Customizer\Customize;
+
+(new Customize)
+    ->panel( 'My Panel' )
+        ->section( 'My Section' )
+            ->text( 'my-text', 'Text', ['capability' => 'edit_posts'] )
+```
+
 #### Retrieving data
+
 ```php
 <?php
 get_theme_mod('my-color)
@@ -38,6 +64,10 @@ get_theme_mod('my-color)
 
 ## Changelog
 
+### v2.0.0
+
+-   Rename `Manager` to `Customize`
+
 ### v1.0.0
 
-* Initial release
+-   Initial release

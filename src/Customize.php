@@ -14,7 +14,7 @@ namespace Horttcore\Customizer;
  * @see https://codex.wordpress.org/Plugin_API/Action_Reference/customize_register
  * @TODO Category dropdown setting
  */
-class Manager
+class Customize
 {
 
 
@@ -23,7 +23,7 @@ class Manager
      * Construct
      *
      * @param bool $autoInit
-     * @return Manager
+     * @return Customize
      **/
     public function __construct(bool $autoInit = TRUE )
     {
@@ -273,9 +273,9 @@ class Manager
      * @param string $label Panel label
      * @param array $args Panel args - https://developer.wordpress.org/reference/classes/wp_customize_manager/add_panel/
      * 
-     * @return Manager
+     * @return Customize
      **/
-    public function panel(string $label, array $args = []): Manager
+    public function panel(string $label, array $args = []): Customize
     {
         $identifier = sanitize_title( $label );
         $this->currentPanelId = $identifier;
