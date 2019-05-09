@@ -62,7 +62,7 @@ use Horttcore\Customizer\Customize;
 
 ```php
 <?php
-get_theme_mod('my-color)
+get_theme_mod('my-color);
 ```
 
 ## Changelog
