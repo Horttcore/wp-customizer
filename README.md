@@ -26,7 +26,8 @@ use Horttcore\Customizer\Customize;
             ->select( 'my-select', 'Select', ['option1' => 'Option 1', 'option2' => 'Option 2'] );
             ->text( 'my-text', 'Text' )
             ->textarea( 'my-textarea', 'Textarea' )
-            ->url( 'my-url', 'Url' );
+            ->url( 'my-url', 'Url' )
+            ->register();
 ```
 
 ### Advanced
@@ -41,6 +42,7 @@ use Horttcore\Customizer\Customize;
     ->panel( 'My Panel' )
         ->section( 'My Section' )
             ->text( 'my-text', 'Text', ['type' => 'option'] )
+            ->register();
 ```
 
 #### Check for a capability
@@ -53,6 +55,7 @@ use Horttcore\Customizer\Customize;
     ->panel( 'My Panel' )
         ->section( 'My Section' )
             ->text( 'my-text', 'Text', ['capability' => 'edit_posts'] )
+            ->register();
 ```
 
 #### Retrieving data
