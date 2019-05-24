@@ -58,11 +58,24 @@ use Horttcore\Customizer\Customize;
             ->register();
 ```
 
+#### Add a description
+
+```php
+<?php
+use Horttcore\Customizer\Customize;
+
+(new Customize)
+    ->panel( 'My Panel' )
+        ->section( 'My Section' )
+            ->text( 'my-text', 'Text', [], ['description' => __('This is awesome', 'textdomain')] )
+            ->register();
+```
+
 #### Retrieving data
 
 ```php
 <?php
-get_theme_mod('my-color);
+get_theme_mod('my-text');
 ```
 
 ## Changelog
