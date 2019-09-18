@@ -1,28 +1,25 @@
 <?php
 /**
- * Customizer Panels
+ * Customizer Panels.
  *
- * @package   horttcore/wp-customizer
  * @license   GPL-2.0+
  */
 
 namespace Horttcore\Customizer;
 
 /**
- * Customizer settings
+ * Customizer settings.
  *
  * @see https://codex.wordpress.org/Plugin_API/Action_Reference/customize_register
  * @TODO Category dropdown setting
  */
 class Customize
 {
-
-
-
     /**
-     * Construct
+     * Construct.
      *
      * @param bool $autoInit
+     *
      * @return Customize
      **/
     public function __construct(bool $autoInit = true)
@@ -34,55 +31,50 @@ class Customize
         $this->register();
     }
 
-
     /**
-     * Current panel id
+     * Current panel id.
      *
      * @var string
      */
     protected $currentPanelId = '';
 
-
     /**
-     * Current section id
+     * Current section id.
      *
      * @var string
      */
     protected $currentSectionId = '';
 
-
     /**
-     * Panels
+     * Panels.
      *
      * @var array
      */
     protected $panels = [];
 
-
     /**
-     * Sections
+     * Sections.
      *
      * @var array
      */
     protected $sections = [];
 
-
     /**
-     * Sections
+     * Sections.
      *
      * @var array
      */
     protected $fields = [];
 
-
     /**
-     * Register customizer setting as theme mod
+     * Register customizer setting as theme mod.
      *
-     * @param string $identifier Identifier
-     * @param string $name Name
-     * @param array $setting Config - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
-     * @param array $control Control - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param callable $renderer Renderer class i.e. WP_Customize_Control
+     * @param string   $identifier Identifier
+     * @param string   $name       Name
+     * @param array    $setting    Config - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param array    $control    Control - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param callable $renderer   Renderer class i.e. WP_Customize_Control
+     *
      * @return Settings
      */
     public function add(string $identifier, string $name, array $setting, array $control, string $renderer = '')
@@ -131,30 +123,31 @@ class Customize
         return $this;
     }
 
-
     /**
-     * Register a checkbox control in the customizer
+     * Register a checkbox control in the customizer.
      *
      * @param string $identifier Identifier
-     * @param string $label Settings label
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label      Settings label
+     * @param array  $setting    Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control    Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     *
      * @return Settings $this for chaining
      */
     public function checkbox(string $identifier, string $label, array $setting = [], array $control = [])
     {
         $control['type'] = 'checkbox';
+
         return $this->add($identifier, $label, $setting, $control, 'WP_Customize_Control');
     }
 
-
     /**
-     * Register a color control in the customizer
+     * Register a color control in the customizer.
      *
-     * @param string $label Settings label
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label      Settings label
+     * @param array  $setting    Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control    Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @param string $identifier Identifier
+     *
      * @return Settings $this for chaining
      */
     public function color(string $identifier, string $label, array $setting = [], array $control = [])
@@ -162,9 +155,8 @@ class Customize
         return $this->add($identifier, $label, $setting, $control, '\WP_Customize_Color_Control');
     }
 
-
     /**
-     * Get current panel id
+     * Get current panel id.
      *
      * @return string
      **/
@@ -173,9 +165,8 @@ class Customize
         return $this->currentPanelId;
     }
 
-
     /**
-     * Get current section id
+     * Get current section id.
      *
      * @return string
      **/
@@ -184,14 +175,14 @@ class Customize
         return $this->currentSectionId;
     }
 
-
     /**
-     * Register a file control in the customizer
+     * Register a file control in the customizer.
      *
-     * @param string $label Settings label
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label      Settings label
+     * @param array  $setting    Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control    Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @param string $identifier Identifier
+     *
      * @return Settings $this for chaining
      */
     public function file(string $identifier, string $label, array $setting = [], array $control = [])
@@ -199,14 +190,14 @@ class Customize
         return $this->add($identifier, $label, $setting, $control, '\WP_Customize_Upload_Control');
     }
 
-
     /**
-     * Register a image control in the customizer
+     * Register a image control in the customizer.
      *
      * @param string $identifier Identifier
-     * @param string $label Settings label
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label      Settings label
+     * @param array  $setting    Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control    Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     *
      * @return Settings $this for chaining
      */
     public function image(string $identifier, string $label, array $setting = [], array $control = [])
@@ -214,11 +205,11 @@ class Customize
         return $this->add($identifier, $label, $setting, $control, '\WP_Customize_Image_Control');
     }
 
-
     /**
-     * Init settings in the customizer
+     * Init settings in the customizer.
      *
      * @param WP_Customizer $customizer Customizer instance
+     *
      * @return void
      */
     public function init(\WP_Customize_Manager $customizer)
@@ -247,9 +238,8 @@ class Customize
         }
     }
 
-
     /**
-     * Register
+     * Register.
      *
      * @return void
      */
@@ -258,32 +248,32 @@ class Customize
         add_action('customize_register', [$this, 'init']);
     }
 
-
     /**
-     * Url field
+     * Url field.
      *
-     * @param string $label Settings label
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label   Settings label
+     * @param array  $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     *
      * @return Settings $this for chaining
      */
     public function page(string $identifier, $label, array $setting = [], array $control = [])
     {
         $setting['sanitize_callback'] = 'absint';
         $control['type'] = 'dropdown-pages';
+
         return $this->text($identifier, $label, $setting, $control);
     }
 
-
     /**
-     * Panel
+     * Panel.
      *
      * @param string $label Panel label
-     * @param array $args Panel args - https://developer.wordpress.org/reference/classes/wp_customize_manager/add_panel/
+     * @param array  $args  Panel args - https://developer.wordpress.org/reference/classes/wp_customize_manager/add_panel/
      *
      * @return Customize
      **/
-    public function panel(string $label, array $args = []): Customize
+    public function panel(string $label, array $args = []): self
     {
         $identifier = sanitize_title($label);
         $this->currentPanelId = $identifier;
@@ -296,15 +286,15 @@ class Customize
         return $this;
     }
 
-
     /**
-     * Register a radiobutton control in the customizer
+     * Register a radiobutton control in the customizer.
      *
      * @param string $identifier Identifier
-     * @param string $label Settings label
-     * @param array $choices Radio choices, Format: ['value' => 'label']
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label      Settings label
+     * @param array  $choices    Radio choices, Format: ['value' => 'label']
+     * @param array  $setting    Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control    Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     *
      * @return Settings $this for chaining
      */
     public function radio(string $identifier, string $label, array $choices = [], array $setting = [], array $control = [])
@@ -315,12 +305,12 @@ class Customize
         return $this->add($identifier, $label, $setting, $control, 'WP_Customize_Control');
     }
 
-
     /**
-     * Panel
+     * Panel.
      *
      * @param string $name A unique slug-like string to use as an id.
-     * @param array $args - https://developer.wordpress.org/reference/classes/wp_customize_manager/add_section/
+     * @param array  $args - https://developer.wordpress.org/reference/classes/wp_customize_manager/add_section/
+     *
      * @return Manger $this for chaining
      **/
     public function section(string $label, array $args = [], string $identifier = '')
@@ -343,32 +333,33 @@ class Customize
         return $this;
     }
 
-
     /**
-     * Register a selectbox control in the customizer
+     * Register a selectbox control in the customizer.
      *
      * @param string $identifier Identifier
-     * @param string $label Settings label
-     * @param array $choices Select options, Format: ['value' => 'label']
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label      Settings label
+     * @param array  $choices    Select options, Format: ['value' => 'label']
+     * @param array  $setting    Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control    Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     *
      * @return Settings $this for chaining
      */
     public function select(string $identifier, string $label, array $choices = [], array $setting = [], array $control = [])
     {
         $control['type'] = 'select';
         $control['choices'] = $choices;
+
         return $this->add($identifier, $label, $setting, $control, 'WP_Customize_Control');
     }
 
-
     /**
-     * Register a text control in the customizer
+     * Register a text control in the customizer.
      *
      * @param string $identifier Identifier
-     * @param string $label Settings label
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label      Settings label
+     * @param array  $setting    Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control    Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     *
      * @return Settings $this for chaining
      */
     public function text(string $identifier, string $label, array $setting = [], array $control = [])
@@ -376,36 +367,38 @@ class Customize
         return $this->add($identifier, $label, $setting, $control, 'WP_Customize_Control');
     }
 
-
     /**
-     * Register a text control in the customizer
+     * Register a text control in the customizer.
      *
-     * @param string $label Settings label
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label      Settings label
+     * @param array  $setting    Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control    Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @param string $identifier Identifier
+     *
      * @return Settings $this for chaining
      */
     public function textarea(string $identifier, string $label, array $setting = [], array $control = [])
     {
         $setting['sanitize_callback'] = 'wp_kses_post';
         $control['type'] = 'textarea';
+
         return $this->text($identifier, $label, $setting, $control);
     }
 
-
     /**
-     * Url field
+     * Url field.
      *
-     * @param string $label Settings label
-     * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
-     * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     * @param string $label   Settings label
+     * @param array  $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
+     * @param array  $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
+     *
      * @return Settings $this for chaining
      */
     public function url(string $identifier, $label, array $setting = [], array $control = [])
     {
         $setting['sanitize_callback'] = 'esc_url_raw';
         $control['type'] = 'url';
+
         return $this->text($identifier, $label, $setting, $control);
     }
 }
