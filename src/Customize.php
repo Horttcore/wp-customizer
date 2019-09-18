@@ -18,17 +18,18 @@ class Customize
 {
 
 
-    
+
     /**
      * Construct
      *
      * @param bool $autoInit
      * @return Customize
      **/
-    public function __construct(bool $autoInit = TRUE )
+    public function __construct(bool $autoInit = true)
     {
-        if ( !$autoInit )
+        if (!$autoInit) {
             return;
+        }
 
         $this->register();
     }
@@ -59,6 +60,22 @@ class Customize
 
 
     /**
+     * Sections
+     *
+     * @var array
+     */
+    protected $sections = [];
+
+
+    /**
+     * Sections
+     *
+     * @var array
+     */
+    protected $fields = [];
+
+
+    /**
      * Register customizer setting as theme mod
      *
      * @param string $identifier Identifier
@@ -68,9 +85,8 @@ class Customize
      * @param callable $renderer Renderer class i.e. WP_Customize_Control
      * @return Settings
      */
-    public function add( string $identifier, string $name, array $setting, array $control, string $renderer = '' )
+    public function add(string $identifier, string $name, array $setting, array $control, string $renderer = '')
     {
-
         $settingDefaults = [
             // A default value for the setting if none is defined
             'default' => '',
@@ -105,12 +121,12 @@ class Customize
             'input_attrs' => [],
         ];
 
-        $setting = array_filter( wp_parse_args( $setting, $settingDefaults ) );
-        $control = array_filter( wp_parse_args( $control, $controlDefaults ) );
+        $setting = array_filter(wp_parse_args($setting, $settingDefaults));
+        $control = array_filter(wp_parse_args($control, $controlDefaults));
 
-        $this->panels[$this->getCurrentPanelId()]['sections'][$this->getCurrentSectionId()]['fields'][$identifier]['setting'] = $setting;
-        $this->panels[$this->getCurrentPanelId()]['sections'][$this->getCurrentSectionId()]['fields'][$identifier]['control'] = $control;
-        $this->panels[$this->getCurrentPanelId()]['sections'][$this->getCurrentSectionId()]['fields'][$identifier]['renderer'] = $renderer;
+        $this->fields[$identifier]['setting'] = $setting;
+        $this->fields[$identifier]['control'] = $control;
+        $this->fields[$identifier]['renderer'] = $renderer;
 
         return $this;
     }
@@ -125,10 +141,10 @@ class Customize
      * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @return Settings $this for chaining
      */
-    public function checkbox( string $identifier, string $label, array $setting = [], array $control = [] )
+    public function checkbox(string $identifier, string $label, array $setting = [], array $control = [])
     {
         $control['type'] = 'checkbox';
-        return $this->add( $identifier, $label, $setting, $control, 'WP_Customize_Control' );
+        return $this->add($identifier, $label, $setting, $control, 'WP_Customize_Control');
     }
 
 
@@ -141,9 +157,9 @@ class Customize
      * @param string $identifier Identifier
      * @return Settings $this for chaining
      */
-    public function color( string $identifier, string $label, array $setting = [], array $control = [] )
+    public function color(string $identifier, string $label, array $setting = [], array $control = [])
     {
-        return $this->add( $identifier, $label, $setting, $control, '\WP_Customize_Color_Control' );
+        return $this->add($identifier, $label, $setting, $control, '\WP_Customize_Color_Control');
     }
 
 
@@ -178,9 +194,9 @@ class Customize
      * @param string $identifier Identifier
      * @return Settings $this for chaining
      */
-    public function file( string $identifier, string $label, array $setting = [], array $control = [] )
+    public function file(string $identifier, string $label, array $setting = [], array $control = [])
     {
-        return $this->add( $identifier, $label, $setting, $control, '\WP_Customize_Upload_Control' );
+        return $this->add($identifier, $label, $setting, $control, '\WP_Customize_Upload_Control');
     }
 
 
@@ -193,9 +209,9 @@ class Customize
      * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @return Settings $this for chaining
      */
-    public function image( string $identifier, string $label, array $setting = [], array $control = [] )
+    public function image(string $identifier, string $label, array $setting = [], array $control = [])
     {
-        return $this->add( $identifier, $label, $setting, $control, '\WP_Customize_Image_Control' );
+        return $this->add($identifier, $label, $setting, $control, '\WP_Customize_Image_Control');
     }
 
 
@@ -205,38 +221,30 @@ class Customize
      * @param WP_Customizer $customizer Customizer instance
      * @return void
      */
-    public function init( \WP_Customize_Manager $customizer )
+    public function init(\WP_Customize_Manager $customizer)
     {
+        foreach ($this->panels as $panelId => $panel) {
+            $customizer->add_panel($panelId, $panel);
+        }
 
-        foreach ( $this->panels as $panelId => $panel ) :
+        foreach ($this->sections as $sectionId => $section) {
+            $customizer->add_section($sectionId, $section);
+        }
 
-            $customizer->add_panel( $panelId, $panel);
+        foreach ($this->fields as $field => $config) {
+            $customizer->add_setting($field, $config['setting']);
 
-            foreach ( $panel['sections'] as $sectionId => $section ) :
+            if ($config['renderer']) {
+                $customizer->add_control(new $config['renderer'](
+                    $customizer,
+                    $field,
+                    $config['control']
+                ));
+                continue;
+            }
 
-                $customizer->add_section( $sectionId, $section );
-
-                 foreach ( $section['fields'] as $field => $config ) :
-
-                    $customizer->add_setting( $field, $config['setting'] );
-
-                    if ( $config['renderer'] ) :
-                        $customizer->add_control( new $config['renderer'](
-                            $customizer,
-                            $field,
-                            $config['control']
-                        ) );
-                        continue;
-                    endif;
-
-                    $customizer->add_control( $identifier, $config['control'] );
-
-                endforeach;
-
-            endforeach;
-
-        endforeach;
-
+            $customizer->add_control($identifier, $config['control']);
+        }
     }
 
 
@@ -247,7 +255,7 @@ class Customize
      */
     public function register()
     {
-        add_action( 'customize_register', [$this, 'init'] );
+        add_action('customize_register', [$this, 'init']);
     }
 
 
@@ -259,11 +267,11 @@ class Customize
      * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @return Settings $this for chaining
      */
-    public function page( string $identifier, $label, array $setting = [], array $control = [] )
+    public function page(string $identifier, $label, array $setting = [], array $control = [])
     {
         $setting['sanitize_callback'] = 'absint';
         $control['type'] = 'dropdown-pages';
-        return $this->text( $identifier, $label, $setting, $control );
+        return $this->text($identifier, $label, $setting, $control);
     }
 
 
@@ -272,18 +280,19 @@ class Customize
      *
      * @param string $label Panel label
      * @param array $args Panel args - https://developer.wordpress.org/reference/classes/wp_customize_manager/add_panel/
-     * 
+     *
      * @return Customize
      **/
     public function panel(string $label, array $args = []): Customize
     {
-        $identifier = sanitize_title( $label );
+        $identifier = sanitize_title($label);
         $this->currentPanelId = $identifier;
 
         $this->panels[$identifier]['title'] = $label;
         $this->panels[$identifier]['priority'] = 200;
         $this->panels[$identifier]['sections'] = [];
         $this->panels[$identifier] = array_merge($this->panels[$identifier], $args);
+
         return $this;
     }
 
@@ -293,17 +302,17 @@ class Customize
      *
      * @param string $identifier Identifier
      * @param string $label Settings label
-     * @param array $choices Radio choices, Format: ['value' => 'label'] 
+     * @param array $choices Radio choices, Format: ['value' => 'label']
      * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
      * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @return Settings $this for chaining
      */
-    public function radio( string $identifier, string $label, array $choices = [], array $setting = [], array $control = [] )
+    public function radio(string $identifier, string $label, array $choices = [], array $setting = [], array $control = [])
     {
         $control['type'] = 'radio';
         $control['choices'] = $choices;
 
-        return $this->add( $identifier, $label, $setting, $control, 'WP_Customize_Control' );
+        return $this->add($identifier, $label, $setting, $control, 'WP_Customize_Control');
     }
 
 
@@ -314,14 +323,22 @@ class Customize
      * @param array $args - https://developer.wordpress.org/reference/classes/wp_customize_manager/add_section/
      * @return Manger $this for chaining
      **/
-    public function section( string $label, $args = [] )
+    public function section(string $label, array $args = [], string $identifier = '')
     {
-        $identifier = sanitize_title( $label );
-        $this->currentSectionId = $identifier;
+        if (!$identifier) {
+            $identifier = sanitize_title($label);
+        }
 
-        $args['title'] = $label;
-        $args['panel'] = $this->getCurrentPanelId();
-        $this->panels[$this->getCurrentPanelId()]['sections'][$identifier] = $args;
+        if (!isset($args['title'])) {
+            $args['title'] = $label;
+        }
+
+        if (!isset($args['panel'])) {
+            $args['panel'] = $this->getCurrentPanelId();
+        }
+
+        $this->sections[$identifier] = $args;
+        $this->currentSectionId = $identifier;
 
         return $this;
     }
@@ -332,16 +349,16 @@ class Customize
      *
      * @param string $identifier Identifier
      * @param string $label Settings label
-     * @param array $choices Select options, Format: ['value' => 'label'] 
+     * @param array $choices Select options, Format: ['value' => 'label']
      * @param array $setting Settings args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_setting
      * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @return Settings $this for chaining
      */
-    public function select( string $identifier, string $label, array $choices = [], array $setting = [], array $control = [] )
+    public function select(string $identifier, string $label, array $choices = [], array $setting = [], array $control = [])
     {
         $control['type'] = 'select';
         $control['choices'] = $choices;
-        return $this->add( $identifier, $label, $setting, $control, 'WP_Customize_Control' );
+        return $this->add($identifier, $label, $setting, $control, 'WP_Customize_Control');
     }
 
 
@@ -354,9 +371,9 @@ class Customize
      * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @return Settings $this for chaining
      */
-    public function text( string $identifier, string $label, array $setting = [], array $control = [] )
+    public function text(string $identifier, string $label, array $setting = [], array $control = [])
     {
-        return $this->add( $identifier, $label, $setting, $control, 'WP_Customize_Control' );
+        return $this->add($identifier, $label, $setting, $control, 'WP_Customize_Control');
     }
 
 
@@ -369,11 +386,11 @@ class Customize
      * @param string $identifier Identifier
      * @return Settings $this for chaining
      */
-    public function textarea( string $identifier, string $label, array $setting = [], array $control = [] )
+    public function textarea(string $identifier, string $label, array $setting = [], array $control = [])
     {
         $setting['sanitize_callback'] = 'wp_kses_post';
         $control['type'] = 'textarea';
-        return $this->text( $identifier, $label, $setting, $control );
+        return $this->text($identifier, $label, $setting, $control);
     }
 
 
@@ -385,12 +402,10 @@ class Customize
      * @param array $control Control args - https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
      * @return Settings $this for chaining
      */
-    public function url( string $identifier, $label, array $setting = [], array $control = [] )
+    public function url(string $identifier, $label, array $setting = [], array $control = [])
     {
         $setting['sanitize_callback'] = 'esc_url_raw';
         $control['type'] = 'url';
-        return $this->text( $identifier, $label, $setting, $control );
+        return $this->text($identifier, $label, $setting, $control);
     }
-
-
 }

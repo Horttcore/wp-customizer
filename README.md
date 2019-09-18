@@ -15,18 +15,18 @@ A helper package for working with the WordPress Customizer
 use Horttcore\Customizer\Customize;
 
 (new Customize)
-    ->panel( 'My Panel' )
-        ->section( 'My Section' )
-            ->checkbox( 'my-checkbox', 'Checkbox' )
-            ->color( 'my-color', 'Color' )
-            ->file( 'my-file', 'File' )
-            ->image( 'my-image', 'Image' )
-            ->page( 'my-page', 'Page' )
-            ->radio( 'my-radio', 'Radio', ['option1' => 'Option 1', 'option2' => 'Option 2'] );
-            ->select( 'my-select', 'Select', ['option1' => 'Option 1', 'option2' => 'Option 2'] );
-            ->text( 'my-text', 'Text' )
-            ->textarea( 'my-textarea', 'Textarea' )
-            ->url( 'my-url', 'Url' )
+    ->panel( __('My Panel', 'textdomain') )
+        ->section( __('My Section', 'textdomain') )
+            ->checkbox( 'my-checkbox', __('Checkbox', 'textdomain') )
+            ->color( 'my-color', __('Color', 'textdomain') )
+            ->file( 'my-file', __('File', 'textdomain') )
+            ->image( 'my-image', __('Image', 'textdomain') )
+            ->page( 'my-page', __('Page', 'textdomain') )
+            ->radio( 'my-radio', __('Radio', 'textdomain'), ['option1' => 'Option 1', 'option2' => 'Option 2'] );
+            ->select( 'my-select', __('Select', 'textdomain'), ['option1' => 'Option 1', 'option2' => 'Option 2'] );
+            ->text( 'my-text', __('Text', 'textdomain') )
+            ->textarea( 'my-textarea', __('Textarea', 'textdomain') )
+            ->url( 'my-url', __('Url', 'textdomain') )
             ->register();
 ```
 
@@ -39,9 +39,9 @@ use Horttcore\Customizer\Customize;
 use Horttcore\Customizer\Customize;
 
 (new Customize)
-    ->panel( 'My Panel' )
-        ->section( 'My Section' )
-            ->text( 'my-text', 'Text', ['type' => 'option'] )
+    ->panel( __('My Panel', 'textdomain')  )
+        ->section( __('My Section', 'textdomain') )
+            ->text( 'my-text', __('My Text', 'textdomain'), ['type' => 'option'] )
             ->register();
 ```
 
@@ -53,8 +53,8 @@ use Horttcore\Customizer\Customize;
 
 (new Customize)
     ->panel( 'My Panel' )
-        ->section( 'My Section' )
-            ->text( 'my-text', 'Text', ['capability' => 'edit_posts'] )
+        ->section( __('My Section', 'textdomain') )
+            ->text( 'my-text', __('My Text', 'textdomain'), ['capability' => 'edit_posts'] )
             ->register();
 ```
 
@@ -75,10 +75,26 @@ use Horttcore\Customizer\Customize;
 
 ```php
 <?php
-get_theme_mod('my-text');
+$mod = get_theme_mod('my-text');
+```
+
+#### Adding a setting in an existing panel
+
+```php
+<?php
+(new Customize)
+    ->image( 'mobile logo', __('Mobile Logo', 'textdomain'), [], [
+        'section' => 'title_tagline',
+        'priority' => 1
+    ] )
+    ->register();
 ```
 
 ## Changelog
+
+### v2.1.0
+
+-   Adding support for including elements in existing panels
 
 ### v2.0.0
 
