@@ -27,7 +27,7 @@ use Horttcore\Customizer\Customize;
             ->text( 'my-text', __('Text', 'textdomain') )
             ->textarea( 'my-textarea', __('Textarea', 'textdomain') )
             ->url( 'my-url', __('Url', 'textdomain') )
-            ->register();
+    ->register();
 ```
 
 ### Advanced
