@@ -259,7 +259,7 @@ class Customize
      */
     public function page(string $identifier, $label, array $setting = [], array $control = [])
     {
-        $setting['sanitize_callback'] = 'absint';
+        array_merge($setting, ['sanitize_callback' => 'absint']);
         $control['type'] = 'dropdown-pages';
 
         return $this->text($identifier, $label, $setting, $control);
@@ -379,7 +379,7 @@ class Customize
      */
     public function textarea(string $identifier, string $label, array $setting = [], array $control = [])
     {
-        $setting['sanitize_callback'] = 'wp_kses_post';
+        array_merge($setting, ['sanitize_callback' => 'wp_kses_post']);
         $control['type'] = 'textarea';
 
         return $this->text($identifier, $label, $setting, $control);
@@ -396,7 +396,7 @@ class Customize
      */
     public function url(string $identifier, $label, array $setting = [], array $control = [])
     {
-        $setting['sanitize_callback'] = 'esc_url_raw';
+        array_merge($setting, ['sanitize_callback' => 'esc_url_raw']);
         $control['type'] = 'url';
 
         return $this->text($identifier, $label, $setting, $control);
