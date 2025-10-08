@@ -1,16 +1,16 @@
 {
-    "name": "horttcore/wp-customizer",
-    "description": "A helper package for working with the WordPress Customizer",
+    "name": "ralfhortt/wp-customize",
+    "description": "A helper package for working with the WordPress Settings and Customizer",
     "license": "MIT",
     "authors": [
         {
             "name": "Ralf Hortt",
-            "email": "me@horttcore.de"
+            "email": "mail@ralfhortt.dev"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Horttcore\\Customizer\\": "src/"
+            "RalfHortt\\Customize\\": "src/"
         }
     }
 }

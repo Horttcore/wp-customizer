@@ -5,7 +5,7 @@
  * @license   GPL-2.0+
  */
 
-namespace Horttcore\Customizer;
+namespace RalfHortt\Customize;
 
 /**
  * Customizer settings.
@@ -48,21 +48,48 @@ class Customize
     /**
      * Panels.
      *
-     * @var array
+     * @var array<string, array{
+     *     title: string,
+     *     priority: int,
+     *     sections: array<string, mixed>
+     * }>
      */
     protected $panels = [];
 
     /**
      * Sections.
      *
-     * @var array
+     * @var array<string, array{
+     *     title?: string,
+     *     panel?: string
+     * }>
      */
     protected $sections = [];
 
     /**
-     * Sections.
+     * Fields.
      *
-     * @var array
+     * @var array<string, array{
+     *     setting: array{
+     *         default?: mixed,
+     *         type?: string,
+     *         capability?: string,
+     *         theme_supports?: string,
+     *         transport?: string,
+     *         sanitize_callback?: string|callable,
+     *         sanitize_js_callback?: string|callable
+     *     },
+     *     control: array{
+     *         label: string,
+     *         description?: string,
+     *         section: string,
+     *         priority?: string|int,
+     *         type?: string,
+     *         settings?: string,
+     *         input_attrs?: array<string, mixed>
+     *     },
+     *     renderer?: string
+     * }>
      */
     protected $fields = [];
 
@@ -234,7 +261,7 @@ class Customize
                 continue;
             }
 
-            $customizer->add_control($identifier, $config['control']);
+            $customizer->add_control($field, $config['control']);
         }
     }
 
