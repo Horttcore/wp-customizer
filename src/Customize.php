@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Customizer Panels.
  *
@@ -11,6 +12,7 @@ namespace RalfHortt\Customize;
  * Customizer settings.
  *
  * @see https://codex.wordpress.org/Plugin_API/Action_Reference/customize_register
+ *
  * @TODO Category dropdown setting
  */
 class Customize
